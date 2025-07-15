@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ book.title }} - BookLook</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body {
+            background-color: #f5f5f0;
+            background-image: url('https://www.transparenttextures.com/patterns/wood-pattern.png');
+            font-family: 'Libre Baskerville', serif;
+            color: #2c3e50;
+        }
+        .library-header {
+            background-color: #6b4226;
+            background-image: url('https://www.transparenttextures.com/patterns/dark-wood.png');
+            color: #f5f5f0;
+            padding: 2rem 0;
+            border-bottom: 5px solid #8b5a2b;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+        .book-container {
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            padding: 30px;
+            margin-top: 30px;
+            border-left: 10px solid #6b4226;
+            position: relative;
+        }
+        .book-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 100%;
+            background-image: url('https://www.transparenttextures.com/patterns/cream-paper.png');
+            opacity: 0.4;
+            border-radius: 0 5px 5px 0;
+            pointer-events: none;
+            z-index: 0;
+        }
+        .book-container > .row {
+            position: relative;
+            z-index: 1;
+        }
+        .book-image {
+            max-width: 200px;
+            box-shadow: 8px 8px 15px rgba(0,0,0,0.3);
+            border: 3px solid #e0e0e0;
+            transition: all 0.5s;
+        }
+        .book-image:hover {
+            transform: rotate(-2deg) scale(1.03);
+            box-shadow: 10px 10px 20px rgba(0,0,0,0.4);
+        }
+        .book-title {
+            font-family: 'Playfair Display', serif;
+            color: #6b4226;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 10px;
+            position: relative;
+        }
+        .book-title::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 100px;
+            height: 2px;
+            background-color: #8b5a2b;
+        }
+        .book-author {
+            font-style: italic;
+            color: #8b5a2b;
+        }
+        .book-genre {
+            background-color: #e0e0e0;
+            color: #6b4226;
+            font-size: 0.9rem;
+            padding: 5px 10px;
+            border-radius: 20px;
+            margin-right: 5px;
+            display: inline-block;
+            margin-bottom: 5px;
+        }
+        .book-description {
+            line-height: 1.8;
+            text-align: justify;
+            margin-top: 20px;
+            font-size: 1.1rem;
+            padding: 15px;
+            background-color: rgba(245, 245, 240, 0.5);
+            border-radius: 5px;
+            border-left: 3px solid #8b5a2b;
+        }
+        .status-badge {
+            font-size: 1rem;
+            padding: 5px 15px;
+            border-radius: 20px;
+            margin-bottom: 15px;
+            display: inline-block;
+        }
+        .status-to-read {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+        .status-reading {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+        .status-completed {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        .back-btn {
+            background-color: #6b4226;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            margin-top: 20px;
+            transition: all 0.3s;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            display: inline-flex;
+            align-items: center;
+        }
+        .back-btn:hover {
+            background-color: #8b5a2b;
+            transform: translateY(-3px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+        }
+        .back-btn:active {
+            transform: translateY(0);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+        }
+        .status-form {
+            margin-top: 20px;
+        }
+        .status-form select {
+            border: 1px solid #6b4226;
+            padding: 8px;
+            border-radius: 5px;
+        }
+        .status-form button {
+            background-color: #6b4226;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header class="library-header text-center">
+        <div class="container">
+            <h1 class="display-4">BookLook Library</h1>
+            <p class="lead">Your Personal Reading Collection</p>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="book-container">
+            <div class="row">
+                <div class="col-md-3 text-center mb-4">
+                    {% if book.image_url %}
+                        <img src="{{ book.image_url }}" alt="{{ book.title }}" class="img-fluid book-image">
+                    {% else %}
+                        <div class="book-image d-flex align-items-center justify-content-center bg-light" style="height: 250px;">
+                            <i class="fas fa-book fa-4x text-secondary"></i>
+                        </div>
+                    {% endif %}
+                    
+                    {% if book.status == 'To Read' %}
+                        <div class="status-badge status-to-read mt-3">
+                            <i class="fas fa-bookmark me-2"></i>To Read
+                        </div>
+                    {% elif book.status == 'Reading' %}
+                        <div class="status-badge status-reading mt-3">
+                            <i class="fas fa-book-open me-2"></i>Reading
+                        </div>
+                    {% elif book.status == 'Completed' %}
+                        <div class="status-badge status-completed mt-3">
+                            <i class="fas fa-check-circle me-2"></i>Completed
+                        </div>
+                    {% endif %}
+                    
+                    <form action="{{ url_for('update_status', book_id=book.id) }}" method="post" class="status-form">
+                        <div class="input-group">
+                            <select name="status" class="form-select">
+                                <option value="To Read" {% if book.status == 'To Read' %}selected{% endif %}>To Read</option>
+                                <option value="Reading" {% if book.status == 'Reading' %}selected{% endif %}>Reading</option>
+                                <option value="Completed" {% if book.status == 'Completed' %}selected{% endif %}>Completed</option>
+                            </select>
+                            <button type="submit" class="btn">Update</button>
+                        </div>
+                    </form>
+                </div>
+                
+                <div class="col-md-9">
+                    <h2 class="book-title">{{ book.title }}</h2>
+                    <h4 class="book-author">by {{ book.author }}</h4>
+                    
+                    <div class="mt-3 mb-4">
+                        {% for genre in book.genre.split(',') %}
+                            <span class="book-genre">{{ genre.strip() }}</span>
+                        {% endfor %}
+                    </div>
+                    
+                    <div class="book-description">
+                        {{ book.description }}
+                    </div>
+                    
+                    <div class="mt-4">
+                        <p><strong>Added to library:</strong> {{ book.date_added }}</p>
+                    </div>
+                    
+                    <div class="d-flex justify-content-between mt-4">
+                        <a href="{{ url_for('index') }}" class="back-btn">
+                            <i class="fas fa-arrow-left me-2"></i>Back to Library
+                        </a>
+                        
+                        <form action="{{ url_for('remove_book', book_id=book.id) }}" method="post" onsubmit="return confirm('Are you sure you want to remove this book from your library?');">
+                            <button type="submit" class="btn btn-danger">
+                                <i class="fas fa-trash me-2"></i>Remove from Library
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
