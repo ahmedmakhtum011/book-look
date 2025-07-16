@@ -30,10 +30,6 @@ A Flask-based web application for managing your personal book collection.
 5. Run the application: `python app.py`
 6. Open your browser and navigate to `http://127.0.0.1:5000`
 
-## Screenshots
-
-*Add screenshots of your application here*
-
 ## Future Enhancements
 
 - User authentication
