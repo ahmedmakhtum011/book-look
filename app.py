@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template, jsonify, redirect, url_for, flash, session
+from flask import Flask, request, render_template, jsonify, redirect, url_for, flash, session, send_from_directory
 import requests
 import sqlite3
 import os
@@ -199,6 +199,11 @@ def suggest_books():
     except Exception as e:
         print(f"Error fetching suggestions: {e}")
     return jsonify([])
+
+@app.route('/docs/<path:filename>')
+def docs_static(filename):
+    """Serve files from the docs/ folder so you can preview the static site at http://localhost:5000/docs/index.html """
+    return send_from_directory(os.path.join(app.root_path, 'docs'), filename)
 
 # Initialize database when the app starts
 # Using with_app_context for newer Flask versions
