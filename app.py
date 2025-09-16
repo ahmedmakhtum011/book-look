@@ -169,6 +169,37 @@ def book_details(book_id):
         return redirect(url_for('index'))
     return render_template('book_details.html', book=book)
 
+@app.route('/suggest_books', methods=['GET'])
+def suggest_books():
+    query = request.args.get('q', '')
+    if not query or len(query) < 2:
+        return jsonify([])
+    
+    url = f'https://www.googleapis.com/books/v1/volumes?q=intitle:{query}&maxResults=5'
+    if GOOGLE_BOOKS_API_KEY:
+        url += f'&key={GOOGLE_BOOKS_API_KEY}'
+    
+    try:
+        response = requests.get(url)
+        if response.status_code == 200:
+            data = response.json()
+            suggestions = []
+            if 'items' in data:
+                for item in data['items']:
+                    volume_info = item['volumeInfo']
+                    title = volume_info.get('title', '')
+                    authors = volume_info.get('authors', ['Unknown'])
+                    thumbnail = volume_info.get('imageLinks', {}).get('thumbnail', '')
+                    suggestions.append({
+                        'title': title,
+                        'author': ', '.join(authors),
+                        'thumbnail': thumbnail
+                    })
+            return jsonify(suggestions)
+    except Exception as e:
+        print(f"Error fetching suggestions: {e}")
+    return jsonify([])
+
 # Initialize database when the app starts
 # Using with_app_context for newer Flask versions
 with app.app_context():
