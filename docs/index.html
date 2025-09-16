@@ -7,12 +7,14 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
     <style>
-        body { background:#f3f2ef; }
-        .book-card { transition:transform .2s; }
-        .book-card:hover { transform:translateY(-3px); }
-        .book-img { height:260px; object-fit:cover; }
-        .book-status { position:absolute; top:8px; left:8px; padding:3px 6px; border-radius:4px; font-size:.75rem; color:#fff; background:#455a64; }
-        .status-reading { background:#ffb74d; } .status-completed { background:#66bb6a; }
+        body { background-image:url('https://www.transparenttextures.com/patterns/wood-pattern.png'); background-color:#f5efe0; padding-top:20px; }
+        .book-card { height:100%; transition:all .3s ease; border-radius:12px; overflow:hidden; border:none; box-shadow:0 5px 15px rgba(0,0,0,.08); }
+        .book-card:hover { transform:translateY(-8px); box-shadow:0 15px 30px rgba(0,0,0,.15); }
+        .book-img { height:180px; object-fit:contain; background-color:#f9f9f9; }
+        .book-status { position:absolute; top:10px; right:10px; padding:5px 10px; border-radius:20px; font-size:.75rem; font-weight:bold; }
+        .status-to-read { background-color:#ffc107; color:#212529; }
+        .status-reading { background-color:#0d6efd; color:#fff; }
+        .status-completed { background-color:#198754; color:#fff; }
         .suggestions-container { position:absolute; width:100%; max-height:220px; overflow-y:auto; background:#fff; border:1px solid #ddd; border-radius:0 0 8px 8px; z-index:1000; box-shadow:0 5px 10px rgba(0,0,0,.1); display:none; }
         .suggestion-item { padding:10px 15px; cursor:pointer; border-bottom:1px solid #f0f0f0; }
         .suggestion-item:hover { background:#f5f5f5; }
@@ -63,7 +65,7 @@ function renderBooks(){
   if(!books.length){ empty.classList.remove('d-none'); return; } else empty.classList.add('d-none');
   books.forEach((b,idx)=>{
     const col=document.createElement('div'); col.className='col';
-    col.innerHTML=`<div class="card book-card h-100"><div class="position-relative">${b.image?`<img src="${b.image}" class="card-img-top book-img" alt="${b.title}">`:`<div class="card-img-top book-img bg-light d-flex align-items-center justify-content-center"><span class="text-muted">No Image</span></div>`}<span class="book-status status-${b.status.toLowerCase()}">${b.status}</span></div><div class="card-body"><h5 class="card-title">${b.title}</h5><p class="card-text"><small class="text-muted">${b.author||''}</small></p></div><div class="card-footer bg-white d-flex justify-content-between"><select class="form-select form-select-sm me-2" data-idx="${idx}"><option${b.status==='To Read'?' selected':''}>To Read</option><option${b.status==='Reading'?' selected':''}>Reading</option><option${b.status==='Completed'?' selected':''}>Completed</option></select><button class="btn btn-outline-danger btn-sm" data-del="${idx}"><i class="fas fa-trash-alt"></i></button></div></div>`;
+    col.innerHTML=`<div class="card book-card h-100"><div class="position-relative">${b.image?`<img src="${b.image}" class="card-img-top book-img" alt="${b.title}">`:`<div class="card-img-top book-img bg-light d-flex align-items-center justify-content-center"><span class="text-muted">No Image</span></div>`}<span class="book-status status-${b.status.toLowerCase().replace(/\s+/g,'-')}">${b.status}</span></div><div class="card-body"><h5 class="card-title">${b.title}</h5><p class="card-text"><small class="text-muted">${b.author||''}</small></p></div><div class="card-footer bg-white d-flex justify-content-between"><select class="form-select form-select-sm me-2" data-idx="${idx}"><option${b.status==='To Read'?' selected':''}>To Read</option><option${b.status==='Reading'?' selected':''}>Reading</option><option${b.status==='Completed'?' selected':''}>Completed</option></select><button class="btn btn-outline-danger btn-sm" data-del="${idx}"><i class="fas fa-trash-alt"></i></button></div></div>`;
     grid.appendChild(col);
   });
 }
